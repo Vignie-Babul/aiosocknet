@@ -5,6 +5,8 @@ import logging
 import socket
 from typing import Any
 
+from aiosocknet.src.http import JSONResponse
+
 
 def empty_callable(*args: Any, **kwargs: Any) -> None: pass
 
@@ -256,5 +258,5 @@ class AIOSockConn:
 
 		return request.decode('utf-8')
 
-	async def send(self, response: str) -> None:
-		await self._event_loop.sock_sendall(self._sock, response.encode('utf-8'))
+	async def send(self, response: str | JSONResponse) -> None:
+		await self._event_loop.sock_sendall(self._sock, str(response).encode('utf-8'))
