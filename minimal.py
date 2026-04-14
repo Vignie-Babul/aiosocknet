@@ -4,11 +4,11 @@ from aiosocknet import AIOSockServ, HTTPStatus, JSONResponse
 
 async def handle_client(conn) -> None:
 	request = await conn.recv()
-	print(request) # response handling
+	print(f'Received request:\n{request}') # request handling
 	await conn.send(JSONResponse(
 		HTTPStatus.OK,
 		{'message': 'install archlinux'},
-		headers={'AtTheEnd': 'I use Arch btw'},
+		headers={'ImportantMessage': 'I use Arch btw'},
 	))
 
 

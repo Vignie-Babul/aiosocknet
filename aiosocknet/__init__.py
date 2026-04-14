@@ -10,7 +10,6 @@ from aiosocknet.src.network import (
 	SockConn,
 	SockServ,
 )
-from aiosocknet.src.utils import pprintr
 
 
 __all__ = [
@@ -20,7 +19,6 @@ __all__ = [
 	'HTTPStatus',
 	'JSONResponse',
 	'JSONValue',
-	'pprintr',
 	'Router',
 	'SockConn',
 	'SockServ',
