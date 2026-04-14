@@ -31,7 +31,7 @@ router = Router()
 def root() -> JSONResponse:
 	return JSONResponse(
 		HTTPStatus.OK,
-		{'response': 'Python WebServer with aiosocknet!'},
+		{'response': 'Hello, Python WebServer!'},
 	)
 
 
@@ -44,6 +44,18 @@ def get_distro(distro_id: str) -> JSONResponse:
 			str(distro_id): distros[distro_id]
 		},
 	)
+
+
+@router.route('/tux')
+def get_tux_info() -> JSONResponse:
+	return JSONResponse(HTTPStatus.OK, {
+		'name': 'Tux',
+		'birth_date': [9, 5, 1996],
+		'company': {
+			'name': 'Linux',
+			'website': 'https://www.linux.org/',
+		},
+	})
 
 
 async def handle_client(conn: AIOSockConn) -> None:
