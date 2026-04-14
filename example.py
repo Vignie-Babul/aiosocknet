@@ -37,7 +37,7 @@ def root() -> JSONResponse:
 
 @router.route('/distros/{distro_id}')
 def get_distro(distro_id: str) -> JSONResponse:
-	distro_id: int = max(int(distro_id), len(distros))
+	distro_id: int = min(int(distro_id), len(distros) - 1)
 	return JSONResponse(
 		HTTPStatus.OK,
 		{
