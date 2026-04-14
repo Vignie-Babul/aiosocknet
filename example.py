@@ -37,10 +37,11 @@ def root() -> JSONResponse:
 
 @router.route('/distros/{distro_id}')
 def get_distro(distro_id: str) -> JSONResponse:
+	distro_id: int = max(int(distro_id), len(distros))
 	return JSONResponse(
 		HTTPStatus.OK,
 		{
-			distro_id: distros[int(distro_id)]
+			str(distro_id): distros[distro_id]
 		},
 	)
 
