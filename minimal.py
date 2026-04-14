@@ -1,12 +1,15 @@
 import asyncio
+from aiosocknet import AIOSockServ, HTTPStatus, JSONResponse
 
-from aiosocknet import AIOSockServ, AIOSockConn
 
-
-async def handle_client(conn: AIOSockConn) -> None:
+async def handle_client(conn) -> None:
 	request = await conn.recv()
 	print(request) # response handling
-	await conn.send('HTTP/1.1 200 OK\r\nContent-Length: 8\r\n\r\nresponse')
+	await conn.send(JSONResponse(
+		HTTPStatus.OK,
+		{'message': 'install archlinux'},
+		headers={'AtTheEnd': 'I use Arch btw'},
+	))
 
 
 async def main(host: str, port: int) -> None:

@@ -1,7 +1,10 @@
 from __future__ import annotations
+from collections.abc import Callable
+import logging
 from http import HTTPStatus
 import json
 from typing import Any
+import re
 
 from aiosocknet.src.models import JSONValue
 
@@ -57,3 +60,62 @@ class JSONResponse:
 
 	def _headers_to_str(self, headers: dict[str, Any]) -> str:
 		return f'{CRLF}'.join((f'{k}: {v}' for k, v in headers.items()))
+
+
+class Router:
+	def __init__(self) -> None:
+		self._log = logging.getLogger(__name__)
+
+		self._routes = {}
+		self._compiled = []
+
+	def _get_path(self, request: str) -> str:
+		return request.split('HTTP/1.1')[0].split()[1]
+
+	def _compile_template(self, template: str):
+		parts = []
+		last = 0
+
+		for m in re.finditer(r'\{([^}]+)\}', template):
+			parts.append(re.escape(template[last:m.start()]))
+			name = m.group(1)
+
+			if not re.match(r'^[A-Za-z_]\w*$', name):
+				raise ValueError(f'invalid parameter name: {name}')
+
+			parts.append(f'(?P<{name}>[^/]+)')
+			last = m.end()
+
+		parts.append(re.escape(template[last:]))
+		pattern = ''.join(parts)
+		return re.compile(f'^{pattern}$')
+
+	def _dispatch(self, path: str) -> Any:
+		for pattern, func in self._compiled:
+			matched = pattern.match(path)
+			if matched:
+				kwargs = matched.groupdict()
+				return func(**kwargs)
+
+		return JSONResponse(HTTPStatus.NOT_FOUND, {
+			'status': HTTPStatus.NOT_FOUND.value,
+			'description': HTTPStatus.NOT_FOUND.description,
+		})
+
+	def route(self, path: str) -> Callable:
+		def wrapper(function) -> Callable: 
+			self._routes[path] = function
+			return function
+
+		return wrapper
+
+	def get(self, request: str) -> Any | None:
+		self._compiled = [
+			(
+				self._compile_template(temp),
+				func,
+			) for temp, func in self._routes.items()
+		]
+
+		path = self._get_path(request)
+		return self._dispatch(path)
