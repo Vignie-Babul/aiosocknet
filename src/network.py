@@ -6,14 +6,6 @@ import socket
 from typing import Any
 
 
-'''TODO
-- `recv` and `send` through chunk generator
-- `retry` argument on recv/send methods.
-	default - 0 retry
-? async client
-'''
-
-
 def empty_callable(*args: Any, **kwargs: Any) -> None: pass
 
 
