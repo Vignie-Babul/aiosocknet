@@ -8,7 +8,7 @@ from aiosocknet import (
 	AIOSockConn,
 	HTTPStatus,
 	JSONResponse,
-	Router,
+	APIRouter,
 )
 
 
@@ -24,7 +24,7 @@ distros = [
 ]
 
 
-router = Router()
+router = APIRouter()
 
 
 @router.route('/')

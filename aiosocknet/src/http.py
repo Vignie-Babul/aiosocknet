@@ -62,7 +62,7 @@ class JSONResponse:
 		return f'{CRLF}'.join((f'{k}: {v}' for k, v in headers.items()))
 
 
-class Router:
+class APIRouter:
 	def __init__(self) -> None:
 		self._log = logging.getLogger(__name__)
 

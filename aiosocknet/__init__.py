@@ -1,7 +1,7 @@
 from http import HTTPStatus
 import logging
 
-from aiosocknet.src.http import JSONResponse, Router
+from aiosocknet.src.http import JSONResponse, APIRouter
 from aiosocknet.src.models import JSONValue
 from aiosocknet.src.network import (
 	empty_callable,
@@ -19,7 +19,7 @@ __all__ = [
 	'HTTPStatus',
 	'JSONResponse',
 	'JSONValue',
-	'Router',
+	'APIRouter',
 	'SockConn',
 	'SockServ',
 ]
